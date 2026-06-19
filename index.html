@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio Profissional Júlia Assis 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Outfit:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --black: #0a0908;
+      --dark: #111110;
+      --card-bg: #161514;
+      --gold: #c8a050;
+      --gold-light: #e0bc72;
+      --gold-pale: rgba(200,160,80,0.12);
+      --gold-border: rgba(200,160,80,0.25);
+      --white: #f5f2ee;
+      --cream: #ede8e0;
+      --gray: #7a7570;
+      --gray-light: #b0aca5;
+      --rose: #c4826a;
+      --green: #4a7c5a;
+      --navy: #1a2a4a;
+      --font-display: 'Italiana', serif;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Outfit', sans-serif;
+      --transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); background: var(--black); color: var(--white); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+    .loader {
+      position: fixed; inset: 0; background: var(--black); z-index: 9999;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1.5rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .loader.hidden { opacity: 0; visibility: hidden; }
+    .loader-name {
+      font-family: var(--font-display); font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--white); letter-spacing: 0.2em;
+      animation: fadeIn 1s ease forwards;
+    }
+    .loader-bar { width: 200px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .loader-fill { height: 100%; background: var(--gold); animation: loadFill 2s ease forwards; }
+
+    .cursor { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: transform 0.1s; }
+    .cursor-ring { width: 28px; height: 28px; border: 1px solid var(--gold-border); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9997; transition: all 0.3s ease; transform: translate(-50%,-50%); }
+
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.5rem 5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--transition);
+    }
+    .navbar.scrolled {
+      background: rgba(10,9,8,0.96); backdrop-filter: blur(20px);
+      padding: 1rem 5rem; border-bottom: 1px solid var(--gold-border);
+    }
+    .nav-logo {
+      font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.2em;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 400;
+      color: var(--gray-light); text-decoration: none; transition: color 0.3s; position: relative;
+    }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      padding: 0.6rem 1.8rem; border: 1px solid var(--gold);
+      color: var(--gold) !important; font-size: 0.62rem !important;
+      letter-spacing: 0.2em !important; transition: var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+    .nav-cta::after { display: none !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 22px; height: 1px; background: var(--white); display: block; }
+
+    .hero {
+      min-height: 100vh; position: relative; overflow: hidden;
+      display: flex; align-items: center;
+      background: var(--black);
+    }
+    .hero-bg-img {
+      position: absolute; right: 0; top: 0; width: 55%; height: 100%;
+      object-fit: cover; object-position: center top;
+      opacity: 0.25; filter: grayscale(30%);
+    }
+    .hero-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--black) 45%, rgba(10,9,8,0.4) 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(var(--gold-border) 1px, transparent 1px), linear-gradient(90deg, var(--gold-border) 1px, transparent 1px);
+      background-size: 80px 80px; opacity: 0.15;
+    }
+    .hero-content {
+      position: relative; z-index: 2; padding: 8rem 5rem 5rem;
+      max-width: 680px;
+    }
+    .hero-tag {
+      font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s ease 2.5s forwards;
+    }
+    .hero-name {
+      font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.95; color: var(--white); margin-bottom: 0.5rem;
+      opacity: 0; animation: fadeUp 0.8s ease 2.7s forwards;
+    }
+    .hero-name-accent { color: var(--gold); display: block; }
+    .hero-roles {
+      display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 2rem 0;
+      opacity: 0; animation: fadeUp 0.7s ease 3s forwards;
+    }
+    .role-pill {
+      padding: 0.4rem 1.2rem; border: 1px solid var(--gold-border);
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold-light); background: var(--gold-pale);
+    }
+    .hero-desc {
+      font-size: 0.95rem; font-weight: 300; color: var(--gray-light);
+      line-height: 1.9; max-width: 440px; margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.7s ease 3.2s forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 1.2rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s ease 3.4s forwards;
+    }
+    .btn-gold {
+      display: inline-block; padding: 0.9rem 2.5rem; background: var(--gold);
+      color: var(--black); font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+      transition: var(--transition); border: none; cursor: pointer;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,160,80,0.3); }
+    .btn-outline {
+      display: inline-block; padding: 0.9rem 2.5rem; border: 1px solid var(--gold-border);
+      color: var(--gold-light); font-size: 0.68rem; font-weight: 400;
+      letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: var(--transition);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+    .hero-scroll {
+      position: absolute; bottom: 3rem; left: 5rem; z-index: 2;
+      display: flex; align-items: center; gap: 1rem;
+      opacity: 0; animation: fadeIn 0.8s ease 3.8s forwards;
+    }
+    .hero-scroll-line { width: 60px; height: 1px; background: var(--gold); }
+    .hero-scroll span { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); }
+
+    .section-wrap { padding: 7rem 5rem; max-width: 1400px; margin: 0 auto; }
+    .section-header { margin-bottom: 4rem; }
+    .section-label { font-size: 0.58rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.8rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem); color: var(--white); line-height: 1; }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    #sobre { background: var(--dark); }
+    .sobre-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 7rem; align-items: center; }
+    .sobre-img-wrap { position: relative; }
+    .sobre-img {
+      width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
+      filter: grayscale(20%); transition: filter 0.5s;
+    }
+    .sobre-img:hover { filter: grayscale(0%); }
+    .sobre-img-frame {
+      position: absolute; top: -1rem; left: -1rem; right: 1rem; bottom: 1rem;
+      border: 1px solid var(--gold-border); pointer-events: none; z-index: -1;
+    }
+    .sobre-badge {
+      position: absolute; bottom: -2rem; right: -2rem;
+      width: 110px; height: 110px; background: var(--gold);
+      border-radius: 50%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .sobre-badge strong { font-family: var(--font-display); font-size: 2rem; color: var(--black); line-height: 1; display: block; }
+    .sobre-badge span { font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
+    .sobre-body { font-size: 0.9rem; font-weight: 300; color: var(--gray-light); line-height: 2; margin-bottom: 1.5rem; }
+    .sobre-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+    .skill-item { display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-light); display: flex; justify-content: space-between; }
+    .skill-bar { height: 2px; background: rgba(255,255,255,0.08); }
+    .skill-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 1.5s ease; width: 0%; }
+    .sobre-contact-items { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+    .sobre-contact-item { font-size: 0.82rem; font-weight: 300; color: var(--gray-light); display: flex; align-items: center; gap: 0.8rem; }
+    .sobre-contact-item strong { color: var(--gold); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 400; min-width: 80px; }
+
+    #servicos { background: var(--black); }
+    .servicos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--gold-border); border: 1px solid var(--gold-border); }
+    .servico-card {
+      background: var(--dark); padding: 3rem 2rem;
+      transition: var(--transition); position: relative; overflow: hidden;
+    }
+    .servico-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background: var(--gold); transform: scaleX(0); transition: transform 0.4s ease;
+    }
+    .servico-card:hover::before { transform: scaleX(1); }
+    .servico-card:hover { background: #1a1918; transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .servico-num { font-family: var(--font-display); font-size: 3rem; color: rgba(200,160,80,0.1); line-height:1; margin-bottom: 1.2rem; }
+    .servico-icon { width: 44px; height: 44px; border: 1px solid var(--gold-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; transition: border-color 0.3s; }
+    .servico-card:hover .servico-icon { border-color: var(--gold); }
+    .servico-icon svg { width: 20px; height: 20px; stroke: var(--gold); }
+    .servico-card h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--white); margin-bottom: 0.8rem; }
+    .servico-card p { font-size: 0.8rem; font-weight: 300; color: var(--gray); line-height: 1.8; }
+    .servico-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+    .stag { font-size: 0.55rem; letter-spacing: 0.1em; padding: 0.25rem 0.7rem; border: 1px solid var(--gold-border); color: var(--gold); }
+
+    #webdesigner { background: var(--dark); padding: 7rem 5rem; }
+    .web-header { max-width: 1400px; margin: 0 auto 4rem; }
+    .web-projects-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gold-border); }
+    .web-card {
+      position: relative; overflow: hidden; background: var(--card-bg);
+      transition: var(--transition);
+    }
+    .web-card-img { width:100%; aspect-ratio:16/10; object-fit:cover; display:block; transition: transform 0.6s ease; filter: brightness(0.8) saturate(1.1); }
+    .web-card:hover .web-card-img { transform: scale(1.06); filter: brightness(0.6) saturate(1.2); }
+    .web-card-overlay {
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.2) 60%, transparent 100%);
+      display:flex; flex-direction:column; justify-content:flex-end; padding:2rem;
+    }
+    .web-card-type { font-size:0.55rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
+    .web-card h3 { font-family:var(--font-serif); font-style:italic; font-size:1.3rem; font-weight:400; color:var(--white); margin-bottom:0.4rem; }
+    .web-card p { font-size:0.75rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.6; }
+    .web-card-hover {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      opacity:0; transition:opacity 0.4s;
+    }
+    .web-card:hover .web-card-hover { opacity:1; }
+    .web-card-link {
+      padding:0.7rem 2rem; border:1px solid var(--gold); color:var(--gold);
+      font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none;
+      background:rgba(10,9,8,0.6); transition:var(--transition);
+    }
+    .web-card-link:hover { background:var(--gold); color:var(--black); }
+    .web-card.featured { grid-column: span 2; }
+    .web-card.featured .web-card-img { aspect-ratio: 16/7; }
+
+    #designgrafico { background: var(--black); padding: 7rem 5rem; }
+    .dg-header { max-width: 1400px; margin: 0 auto 4rem; display: flex; justify-content: space-between; align-items: flex-end; }
+    .dg-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    .dg-item { position: relative; overflow: hidden; border: 1px solid var(--gold-border); background: var(--card-bg); }
+    .dg-img { width:100%; aspect-ratio: 4/5; object-fit:cover; display:block; transition: transform 0.6s ease, filter 0.4s; }
+    .dg-item:hover .dg-img { transform: scale(1.06); }
+    .dg-overlay { position:absolute; inset:0; background: linear-gradient(to top, rgba(10,9,8,0.8) 0%, transparent 100%); display:flex; align-items:flex-end; padding:1.5rem; opacity: 0; transition: opacity 0.4s; }
+    .dg-item:hover .dg-overlay { opacity: 1; }
+    .dg-label { font-family:var(--font-serif); font-style:italic; font-size:1rem; color:var(--white); transform:translateY(8px); transition:var(--transition); }
+    .dg-item:hover .dg-label { transform:translateY(0); }
+
+    #socialmedia { background: var(--dark); padding: 7rem 5rem; }
+    .sm-header { max-width: 1400px; margin: 0 auto 4rem; }
+    .sm-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .sm-card { background: var(--black); padding: 2.5rem; border: 1px solid var(--gold-border); transition: var(--transition); }
+    .sm-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+    .sm-card-num { font-family: var(--font-display); font-size: 2rem; color: var(--gold-pale); margin-bottom: 1rem; }
+    .sm-card h3 { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 1rem; color: var(--gold); }
+    .sm-card p { font-size: 0.85rem; line-height: 1.7; color: var(--gray-light); margin-bottom: 1.5rem; }
+    .sm-card-res { font-size: 0.75rem; color: var(--gold-light); font-weight: 500; letter-spacing: 0.05em; border-top: 1px solid var(--gold-border); padding-top: 1rem; }
+
+    #processo { background: var(--black); padding: 7rem 5rem; }
+    .proc-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center; }
+    .proc-steps { display: flex; flex-direction: column; gap: 2rem; }
+    .proc-step { display: flex; gap: 2rem; }
+    .ps-num { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); min-width: 40px; }
+    .ps-c h4 { font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .ps-c p { font-size: 0.85rem; color: var(--gray-light); line-height: 1.6; }
+    .proc-visual { position: relative; overflow: hidden; border: 1px solid var(--gold-border); }
+    .proc-img { width: 100%; display: block; filter: grayscale(40%); transition: 0.5s; }
+    .proc-visual:hover .proc-img { filter: grayscale(0%); }
+
+    /* Prova Social Realista */
+    #prova-social { background: var(--dark); padding: 7rem 5rem; }
+    .ps-header { text-align: center; margin-bottom: 5rem; }
+    .ps-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 5rem; }
+    .stat-item { text-align: center; padding: 2rem; background: var(--black); border: 1px solid var(--gold-border); position: relative; }
+    .stat-num { font-family: var(--font-display); font-size: 3rem; color: var(--gold); display: block; margin-bottom: 0.5rem; }
+    .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gray-light); }
+    .stat-item::after { content: '✓'; position: absolute; top: 1rem; right: 1rem; color: var(--gold); opacity: 0.3; font-size: 0.8rem; }
+    
+    .real-feedback-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .feedback-card { background: var(--black); padding: 2.5rem; border: 1px solid var(--gold-border); position: relative; transition: var(--transition); }
+    .feedback-card:hover { border-color: var(--gold); background: #0e0d0c; }
+    .fb-verified { display: flex; align-items: center; gap: 0.5rem; color: var(--gold); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .fb-verified svg { width: 12px; height: 12px; fill: var(--gold); }
+    .fb-quote { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; line-height: 1.7; color: var(--white); margin-bottom: 2rem; }
+    .fb-user { display: flex; align-items: center; gap: 1rem; }
+    .fb-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--gold-pale); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--gold); border: 1px solid var(--gold-border); }
+    .fb-info h5 { font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .fb-info span { font-size: 0.7rem; color: var(--gray); }
+
+    #contato { background: var(--black); }
+    .contato-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .contato-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; }
+    .cinfo-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .cinfo-item-text strong { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.3rem; }
+    .cinfo-item-text span { font-size: 0.9rem; color: var(--gray-light); }
+    .contato-form { background: var(--dark); padding: 3.5rem; border: 1px solid var(--gold-border); }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .cf { margin-bottom: 1.5rem; }
+    .cf label { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray); margin-bottom: 0.5rem; }
+    .cf input, .cf select, .cf textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--gold-border); padding: 0.8rem 0; color: var(--white); font-family: var(--font-sans); outline: none; transition: 0.3s; }
+    .cf input:focus, .cf select:focus, .cf textarea:focus { border-color: var(--gold); }
+    .cf textarea { height: 100px; resize: none; }
+
+    footer { background: var(--black); border-top: 1px solid var(--gold-border); padding: 4rem 5rem; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.5rem; color: var(--white); text-decoration: none; letter-spacing: 0.2em; }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); text-decoration: none; transition: 0.3s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: 0.7rem; color: var(--gray); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes loadFill { from { width: 0; } to { width: 100%; } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.2s; }
+    .reveal-d2 { transition-delay: 0.4s; }
+    .reveal-d3 { transition-delay: 0.6s; }
+
+    @media (max-width: 1024px) {
+      .navbar { padding: 1.5rem 2rem; }
+      .section-wrap { padding: 5rem 2rem; }
+      .sobre-grid, .servicos-grid, .web-projects-grid, .sm-grid, .proc-wrap, .contato-inner, .ps-stats, .real-feedback-grid { grid-template-columns: 1fr; }
+      .dg-grid { grid-template-columns: 1fr 1fr; }
+      .hero-content { padding: 8rem 2rem; }
+      .hero-bg-img { width: 100%; opacity: 0.15; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loader" id="loader">
+    <div class="loader-name">JÚLIA ASSIS</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">J<span>.</span>ÁGATA</a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#webdesigner">Web Design</a></li>
+      <li><a href="#designgrafico">Design Gráfico</a></li>
+      <li><a href="#contato" class="nav-cta">Orçamento</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-gradient"></div>
+    <img class="hero-bg-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop" alt="Júlia Assis">
+    <div class="hero-content">
+      <p class="hero-tag">Creative Designer & Web Developer</p>
+      <h1 class="hero-name">Júlia <span class="hero-name-accent">Assis</span></h1>
+      <div class="hero-roles">
+        <span class="role-pill">Web Design</span>
+        <span class="role-pill">Social Media</span>
+        <span class="role-pill">Design Gráfico</span>
+        <span class="role-pill">Marketing Digital</span>
+      </div>
+      <p class="hero-desc">Transformando visões em experiências digitais memoráveis. Design estratégico focado em elevar sua marca e converter visitantes em clientes.</p>
+      <div class="hero-actions">
+        <a href="#webdesigner" class="btn-gold">Ver Projetos</a>
+        <a href="#contato" class="btn-outline">Falar Comigo</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll para explorar</span>
+    </div>
+  </section>
+
+  <section id="sobre" class="section-wrap">
+    <div class="sobre-grid">
+      <div class="sobre-img-wrap reveal">
+        <div class="sobre-img-frame"></div>
+        <img class="sobre-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop" alt="Júlia">
+        <div class="sobre-badge">
+          <strong>05+</strong>
+          <span>Anos de<br>Experiência</span>
+        </div>
+      </div>
+      <div class="sobre-body reveal reveal-d1">
+        <p class="section-label">Minha História</p>
+        <h2 class="section-title">Design com <em>Propósito</em> e Estratégia</h2>
+        <p style="margin: 2rem 0;">Sou apaixonada por criar soluções visuais que não apenas pareçam bonitas, mas que funcionem de verdade. Com um pé no design e outro na tecnologia, ajudo marcas a se posicionarem de forma premium no mercado digital.</p>
+        
+        <div class="sobre-skills">
+          <div class="skill-item">
+            <div class="skill-label"><span>Web Design</span><span>95%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="95"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Branding</span><span>90%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Social Media</span><span>88%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Marketing</span><span>85%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
+          </div>
+        </div>
+
+        <div class="sobre-contact-items">
+          <div class="sobre-contact-item"><strong>WhatsApp</strong><span>+55 34 98808-6470</span></div>
+          <div class="sobre-contact-item"><strong>Localização</strong><span>Brasil</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicos" class="section-wrap">
+    <div class="section-header">
+      <p class="section-label">O Que Ofereço</p>
+      <h2 class="section-title reveal">Serviços <em>Premium</em></h2>
+    </div>
+    <div class="servicos-grid">
+      <div class="servico-card reveal">
+        <div class="servico-num">01</div>
+        <h3>Web Design</h3>
+        <p>Sites exclusivos, responsivos e otimizados para conversão. Interfaces modernas que elevam sua autoridade.</p>
+        <div class="servico-tags"><span class="stag">Landing Pages</span><span class="stag">Portfólios</span></div>
+      </div>
+      <div class="servico-card reveal reveal-d1">
+        <div class="servico-num">02</div>
+        <h3>Design Gráfico</h3>
+        <p>Identidade visual completa, mockups impactantes e artes que comunicam a essência da sua marca.</p>
+        <div class="servico-tags"><span class="stag">Logos</span><span class="stag">Branding</span></div>
+      </div>
+      <div class="servico-card reveal reveal-d2">
+        <div class="servico-num">03</div>
+        <h3>Social Media</h3>
+        <p>Gestão estratégica, criação de conteúdo e crescimento orgânico focado em engajamento real.</p>
+        <div class="servico-tags"><span class="stag">Instagram</span><span class="stag">Estratégia</span></div>
+      </div>
+      <div class="servico-card reveal reveal-d3">
+        <div class="servico-num">04</div>
+        <h3>Marketing</h3>
+        <p>Estratégias digitais, funis de vendas e copywriting persuasivo para gerar resultados reais.</p>
+        <div class="servico-tags"><span class="stag">Copywriting</span><span class="stag">Funis</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="webdesigner" class="section-wrap">
+    <div class="web-header">
+      <p class="section-label">Portfólio Web</p>
+      <h2 class="section-title reveal">Experiências <em>Digitais</em></h2>
+    </div>
+    <div class="web-projects-grid">
+      <div class="web-card featured reveal">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=85" alt="Projeto Web 1">
+        <div class="web-card-overlay">
+          <span class="web-card-type">E-commerce Premium</span>
+          <h3>Luxury Fashion Store</h3>
+          <p>Plataforma completa com foco em UX e alta conversão para marca de moda.</p>
+        </div>
+      </div>
+      <div class="web-card reveal reveal-d1">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=600&q=85" alt="Projeto Web 2">
+        <div class="web-card-overlay">
+          <span class="web-card-type">Landing Page</span>
+          <h3>Consultoria Expert</h3>
+          <p>Página de alta conversão para lançamento de infoproduto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="designgrafico" class="section-wrap">
+    <div class="dg-header">
+      <div>
+        <p class="section-label">Visual Design</p>
+        <h2 class="section-title reveal">Projetos <em>Recentes</em></h2>
+      </div>
+    </div>
+    <div class="dg-grid">
+      <div class="dg-item reveal">
+        <img class="dg-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663324068899/TgPcejJwMjwHwLii.png" alt="Design Natal Chips">
+        <div class="dg-overlay"><span class="dg-label">Embalagem Natalina — Batata Chips</span></div>
+      </div>
+      <div class="dg-item reveal reveal-d1">
+        <img class="dg-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663324068899/rwgLEZWSCddaJRbN.png" alt="Design Natal Feliz">
+        <div class="dg-overlay"><span class="dg-label">Campanha de Natal — Editorial</span></div>
+      </div>
+      <div class="dg-item reveal reveal-d2">
+        <img class="dg-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663324068899/zSNwAskQCUZLLDWF.png" alt="Edições Personalizadas">
+        <div class="dg-overlay"><span class="dg-label">Design & Edições — Editorial de Moda</span></div>
+      </div>
+      <div class="dg-item reveal reveal-d3">
+        <img class="dg-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663324068899/SZEQWVlElmeIJPVO.png" alt="Designer & Arte Maximalismo">
+        <div class="dg-overlay"><span class="dg-label">Designer & Arte — Estilo Maximalista</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="prova-social" class="section-wrap">
+    <div class="ps-header">
+      <p class="section-label">Resultados Reais</p>
+      <h2 class="section-title reveal">Prova <em>Social</em> Realista</h2>
+    </div>
+    
+    <div class="ps-stats reveal">
+      <div class="stat-item">
+        <span class="stat-num">150+</span>
+        <span class="stat-label">Projetos Entregues</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">98%</span>
+        <span class="stat-label">Clientes Satisfeitos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4.9/5</span>
+        <span class="stat-label">Avaliação Média</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">24h</span>
+        <span class="stat-label">Suporte Ágil</span>
+      </div>
+    </div>
+
+    <div class="real-feedback-grid">
+      <div class="feedback-card reveal">
+        <div class="fb-verified">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Feedback Verificado
+        </div>
+        <p class="fb-quote">"A Júlia superou todas as expectativas. O site ficou extremamente profissional e as artes de social media deram uma cara nova para o meu negócio."</p>
+        <div class="fb-user">
+          <div class="fb-avatar">MC</div>
+          <div class="fb-info">
+            <h5>Mariana Cavalcante</h5>
+            <span>CEO Luxury Boutique</span>
+          </div>
+        </div>
+      </div>
+      <div class="feedback-card reveal reveal-d1">
+        <div class="fb-verified">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Feedback Verificado
+        </div>
+        <p class="fb-quote">"Trabalho impecável. A atenção aos detalhes no design gráfico é algo raro de encontrar. Entrega rápida e comunicação excelente."</p>
+        <div class="fb-user">
+          <div class="fb-avatar">RA</div>
+          <div class="fb-info">
+            <h5>Ricardo Almeida</h5>
+            <span>Fundador TechStart</span>
+          </div>
+        </div>
+      </div>
+      <div class="feedback-card reveal reveal-d2">
+        <div class="fb-verified">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Feedback Verificado
+        </div>
+        <p class="fb-quote">"Contratamos a Júlia para o rebranding da nossa marca e o resultado foi surpreendente. Ela entende exatamente a mensagem que queremos passar."</p>
+        <div class="fb-user">
+          <div class="fb-avatar">AL</div>
+          <div class="fb-info">
+            <h5>Ana Lúcia</h5>
+            <span>Diretora de Marketing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="processo" class="section-wrap">
+    <div class="section-header">
+      <p class="section-label">Como Trabalho</p>
+      <h2 class="section-title reveal">Meu <em>Processo</em> Criativo</h2>
+    </div>
+    <div class="proc-wrap">
+      <div class="proc-steps">
+        <div class="proc-step reveal"><div class="ps-num">01</div><div class="ps-c"><h4>Briefing</h4><p>Entendimento profundo dos seus objetivos e público-alvo.</p></div></div>
+        <div class="proc-step reveal reveal-d1"><div class="ps-num">02</div><div class="ps-c"><h4>Estratégia</h4><p>Pesquisa de mercado e definição da linha visual e narrativa.</p></div></div>
+        <div class="proc-step reveal reveal-d2"><div class="ps-num">03</div><div class="ps-c"><h4>Criação</h4><p>Desenvolvimento focado em estética premium e funcionalidade.</p></div></div>
+        <div class="proc-step reveal reveal-d3"><div class="ps-num">04</div><div class="ps-c"><h4>Refinamento</h4><p>Ajustes baseados no seu feedback para atingir a perfeição.</p></div></div>
+      </div>
+      <div class="proc-visual reveal">
+        <img class="proc-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=85" alt="Processo criativo">
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="section-wrap">
+    <div class="contato-inner">
+      <div class="contato-left reveal">
+        <p class="section-label">Vamos Conversar</p>
+        <h2 class="section-title">Pronta para o seu <em>próximo</em> projeto.</h2>
+        <div class="contato-info">
+          <div class="cinfo-item">
+            <div class="cinfo-item-text"><strong>WhatsApp</strong><span>+55 34 98808-6470</span></div>
+          </div>
+          <div class="cinfo-item">
+            <div class="cinfo-item-text"><strong>Email</strong><span>contato@juliaassis.com</span></div>
+          </div>
+          <div class="cinfo-item">
+            <div class="cinfo-item-text"><strong>Disponibilidade</strong><span>Projetos Freelance & Contratos</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="contato-form reveal reveal-d1">
+        <form id="contactForm">
+          <div class="cf-row">
+            <div class="cf"><label>Nome</label><input type="text" placeholder="Seu nome" required></div>
+            <div class="cf"><label>WhatsApp</label><input type="tel" placeholder="+55 00 00000-0000"></div>
+          </div>
+          <div class="cf"><label>Serviço</label>
+            <select>
+              <option>Web Design</option>
+              <option>Design Gráfico</option>
+              <option>Social Media</option>
+              <option>Completo</option>
+            </select>
+          </div>
+          <div class="cf"><label>Mensagem</label><textarea placeholder="Conte-me sobre o projeto..."></textarea></div>
+          <button type="submit" class="btn-gold" style="width: 100%;">Enviar Mensagem</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">J<span>.</span>ÁGATA</a>
+      <ul class="footer-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#webdesigner">Web Design</a></li>
+        <li><a href="#designgrafico">Design Gráfico</a></li>
+      </ul>
+      <p class="footer-copy">&copy; 2026 Júlia Assis. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1500));
+    
+    const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 3 + 'px'; cursor.style.top = my - 3 + 'px'; });
+    (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); })();
+
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60));
+
+    const revObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    const skillObs = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.querySelectorAll('.skill-fill').forEach(bar => bar.style.width = bar.dataset.w + '%'); } }), { threshold: 0.2 });
+    document.querySelectorAll('.sobre-skills').forEach(s => skillObs.observe(s));
+  </script>
+</body>
+</html>
